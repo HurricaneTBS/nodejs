@@ -4,3 +4,11 @@ function timeout(ms){
     })
 }
 
+new Promise((resolve,reject)=>{
+    setTimeout(resolve, ms,'done');
+}).then()
+
+
+class Pro<T>{
+    then()
+}
