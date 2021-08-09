@@ -1,5 +1,6 @@
-const fs = require('fs');
+#!/usr/bin/env node
+console.log('hello ', process.argv[1]);
 
-fs.readFile("person.js",(err,res) => {
-  console.log(res);
+process.argv.forEach(item=>{
+  console.log(item);
 })
