@@ -1,6 +1,6 @@
-## Promise 基础知识
+## 1.Promise 基础知识
 
-### Pormise 概念
+### 1-1 Pormise 概念
 
 `Promise` 是为了解决回调函数带给我们的一些繁琐操作。
 
@@ -35,7 +35,7 @@
 
 有了 `Promise` 对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。此外，`Promise` 对象提供统一的接口，使得控制异步操作更加容易。
 
-### Promise 缺点
+### 1-2 Promise 缺点
 
 `Promise` 也有一些缺点。
 
@@ -105,7 +105,7 @@ interface PromiseLike<T> {
 ```
 
 
-## Promise 基本用法
+## 2.Promise 基本用法
 
 ES6 规定，Promise 对象是一个构造函数，用来生成 Promise 实例。
 
@@ -229,9 +229,9 @@ new Promise((resolve, reject) => {
 // 1
 ```
 
-## `Promise`的主要使用
+## 3.`Promise`的主要使用
 
-### 回调函数
+### 3-1 回调函数
 
 回调函数一直是`JavaScript`中比较令人纠结的写法，主要场景是用于处理并列或者并行的操作，然后在回调函数中处理操作的结果。这样的原生写法会带来如下不便：
 
@@ -301,7 +301,7 @@ try {
 要想避免使用回调函数，就可以使用`Promise`。
 
 
-### `Promise`避免回调函数
+### 3-2 `Promise`避免回调函数
 
 使用Promise改写上面的代码：
 
@@ -320,11 +320,11 @@ func(20).then(value=>console.log(value))
 
 虽然这并没有实现直接处理结果，但是这已经进步了一大步了。
 
-### await/async
+### 3-3 await/async
 
 对于回调来讲，`Promise`的到来看似解决了回调场景中的状态处理问题，但是`JavaScript`中令人头疼的不是回调，而是`回调嵌套`，而`Promise`也不能彻底解决回调嵌套带来的代码维护以及可读性的问题。
 
-#### 原生回调嵌套
+#### 3-3-1 原生回调嵌套
 
 ```js
 function increase(num, callback) {
@@ -367,7 +367,7 @@ increase(1, (err, result1) => {
 // "result1 = 4"
 ```
 
-#### Promise 处理回调嵌套
+#### 3-3-2 Promise 处理回调嵌套
 
 ```js
 function increase(num) {
@@ -405,7 +405,7 @@ increase(1).then((result1) => {
 
 看起来只是把回调的代码换了个位置。
 
-#### aysnc/await的使用
+#### 3-3-3 aysnc/await的使用
 
 - async 是 声明 在回调环境函数
 - await 是 运行 在等待回调结果过程中
