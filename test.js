@@ -1,6 +1,6 @@
-#!/usr/bin/env node
-console.log('hello ', process.argv[1]);
+{
+  let a = 10;
+  var b = 10;
+}
 
-process.argv.forEach(item=>{
-  console.log(item);
-})
+console.log(a, b);
