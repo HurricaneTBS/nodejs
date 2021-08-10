@@ -1,6 +1,3 @@
-{
-  let a = 10;
-  var b = 10;
-}
+let [a, b, c] = [1, 2, 3];
 
-console.log(a, b);
+console.log(a);
