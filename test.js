@@ -1,16 +1,7 @@
-const {keys,values,entries} = Object
+let s1 = Symbol('foo');
+let s2 = Symbol('bar');
 
-let obj = { a: 1, b: 2, c: 3 };
-
-for (let key of keys(obj)) {
-  console.log(key); // 'a', 'b', 'c'
-}
-
-for (let value of values(obj)) {
-    console.log(value); // 'a', 'b', 'c'
-}
-
-
-entries(obj).forEach(item=>{
-    console.log(item);
-})
+console.log(s1);
+console.log(s2);
+console.log(s1.toString());
+console.log(s2.toString());
