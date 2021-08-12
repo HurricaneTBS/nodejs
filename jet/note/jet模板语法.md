@@ -1,6 +1,6 @@
 ## 1.执行基础内容
 
-执行模板需要传递一个变量map和一个上下文:
+执行模板需要传递一个变量 map 和一个上下文:
 
 > 暂时先不看
 
@@ -8,7 +8,7 @@
 
 默认情况下，模板分隔符是`{{}}`。
 
-注释用 `{*  *}`.
+注释用 `{* *}`.
 
 ## 3.访问输入
 
@@ -17,11 +17,13 @@
 给`jet.Set`添加一个全局变量。像下面这种方式去访问它：
 
 设置：
+
 ```js
-viewSet.AddGlobal("version", "v1.1.145")
+viewSet.AddGlobal("version", "v1.1.145");
 ```
 
 访问
+
 ```html
 <footer>Version: {{ version }}</footer>
 ```
@@ -61,7 +63,8 @@ err := t.Execute(&w, vars, data)
 获取上下文可以使用.的方式
 
 ```html
-<div>Request method is: {{ .Method }}</div> <!-- Would be "POST" -->
+<div>Request method is: {{ .Method }}</div>
+<!-- Would be "POST" -->
 ```
 
 ## 4.遍历数据
@@ -86,5 +89,3 @@ Now his name is {{ user.Rename("Frederick", "Johnson") }}.
 ```js
 The test map's value is {{ testMap["testKey"] }}.
 ```
-
-
