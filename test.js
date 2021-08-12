@@ -1,18 +1,5 @@
-const shapeType = {
-  triangle:Symbol()
-}
-
-function getArea(shape,options) {
-  let area = 0;
-  switch (shape){
-    case shapeType.triangle:
-      area = .5 * options.width * options.height;
-      break;
-  }
-  return area;
-}
-
-
-const res = getArea(shapeType.triangle,{width: 100, height: 100 })
-console.log(res);
-
+var target = {};
+var handler = {};
+var proxy = new Proxy(target, handler);
+proxy.a = 'b';
+console.log(target.a); // "b"
