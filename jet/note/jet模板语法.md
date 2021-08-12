@@ -18,13 +18,13 @@
 
 设置：
 
-```js
+```go
 viewSet.AddGlobal("version", "v1.1.145");
 ```
 
 访问
 
-```html
+```handlebars
 <footer>Version: {{ version }}</footer>
 ```
 
@@ -32,7 +32,7 @@ viewSet.AddGlobal("version", "v1.1.145");
 
 和全局变量类似：
 
-```js
+```go
 viewSet.AddGlobal("noblue", func(s string) string {
     return strings.Replace(s, "blue", "", -1)
 })
@@ -44,7 +44,7 @@ viewSet.AddGlobalFunc("noblue", func(args jet.Arguments) reflect.Value {
 })
 ```
 
-```html
+```handlebars
 <div>{{ noblue("red blue green") }}</div>
 <!-- Alternate call syntax, using pipelining (see below) -->
 <div>{{ "red blue green"|noblue }}</div>
@@ -54,7 +54,7 @@ viewSet.AddGlobalFunc("noblue", func(args jet.Arguments) reflect.Value {
 
 设置上下文：
 
-```
+```go
 data := &http.Request{Method: http.MethodPost}
 err := t.Execute(&w, vars, data)
 // ...
@@ -62,7 +62,7 @@ err := t.Execute(&w, vars, data)
 
 获取上下文可以使用.的方式
 
-```html
+```handlebars
 <div>Request method is: {{ .Method }}</div>
 <!-- Would be "POST" -->
 ```
@@ -73,9 +73,9 @@ err := t.Execute(&w, vars, data)
 
 访问成员和调用方法:
 
-```
-// 访问的是user对象里的FirstName
-The user's firstname is {{ user.Firstname }}.
+```handlebars
+//  访问的是user对象里的FirstName 
+The user's firstname is {{ user.Firstname }}
 // 访问的是user对象里的FullName函数
 The user's name is {{ user.Fullname() }}.
 // 访问的是user里带参数的Rename函数
@@ -86,6 +86,6 @@ Now his name is {{ user.Rename("Frederick", "Johnson") }}.
 
 使用方括号语法访问映射:
 
-```html
+```handlebars
 The test map's value is {{ testMap["testKey"] }}.
 ```
