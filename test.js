@@ -1,18 +1,22 @@
-function createArray(...elements) {
-  let handler = {
-    get(target, propKey, receiver) {
-      let index = Number(propKey);
-      if (index < 0) {
-        propKey = String(target.length + index);
+var pipe = function (value) {
+  var funcStack = [];
+  var oproxy = new Proxy({} , {
+    get : function (pipeObject, fnName) {
+      if (fnName === 'get') {
+        return funcStack.reduce(function (val, fn) {
+          return fn(val);
+        },value);
       }
-      return Reflect.get(target, propKey, receiver);
+      funcStack.push(window[fnName]);
+      return oproxy;
     }
-  };
+  });
 
-  let target = [];
-  target.push(...elements);
-  return new Proxy(target, handler);
+  return oproxy;
 }
 
-let arr = createArray('a', 'b', 'c');
-console.log(arr[-1]);
+var double = n => n * 2;
+var pow    = n => n * n;
+var reverseInt = n => n.toString().split("").reverse().join("") | 0;
+pipe(3)
+// pipe(3).double.pow.reverseInt.get; // 63
