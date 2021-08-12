@@ -86,6 +86,6 @@ Now his name is {{ user.Rename("Frederick", "Johnson") }}.
 
 使用方括号语法访问映射:
 
-```
+```html
 The test map's value is {{ testMap["testKey"] }}.
 ```
