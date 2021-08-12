@@ -54,7 +54,7 @@ viewSet.AddGlobalFunc("noblue", func(args jet.Arguments) reflect.Value {
 
 设置上下文：
 
-```js
+```
 data := &http.Request{Method: http.MethodPost}
 err := t.Execute(&w, vars, data)
 // ...
@@ -73,7 +73,7 @@ err := t.Execute(&w, vars, data)
 
 访问成员和调用方法:
 
-```js
+```
 // 访问的是user对象里的FirstName
 The user's firstname is {{ user.Firstname }}.
 // 访问的是user对象里的FullName函数
@@ -86,6 +86,6 @@ Now his name is {{ user.Rename("Frederick", "Johnson") }}.
 
 使用方括号语法访问映射:
 
-```js
+```
 The test map's value is {{ testMap["testKey"] }}.
 ```
