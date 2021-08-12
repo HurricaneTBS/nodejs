@@ -191,6 +191,20 @@ Range() (reflect.Value, reflect.Value, bool)
 <!-- context is []string{"0", "1", "2", "3"}, will print "12" -->
 ```
 
+
+```handlebars
+{{ states := array(1,2,3,4,5,6,7,8,9)}}
+{{range index,value := states[5:8]}}
+    <div>{{index}}----{{value}}</div>
+{{end}}
+
+<!--
+    0----6
+    1----7
+    2----8
+-->
+```
+
 ### 管道
 
 简单的字符串可以通过管道打印或转换。
