@@ -1,21 +1,4 @@
-class A {
-  constructor() {
-    this.x = 1;
-  }
-  print() {
-    console.log(this.x);
-  }
-}
+const a = {};
+Object.assign(a, { y: 80, x: 10 });
 
-class B extends A {
-  constructor() {
-    super();
-    this.x = 2;
-  }
-  m() {
-    this.print();
-  }
-}
-
-let b = new B();
-b.m() // 2
+console.log(a.x,a.y);
