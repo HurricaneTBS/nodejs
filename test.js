@@ -1,27 +1,21 @@
-class Foo {
-  #privateValue = 42;
-  static getPrivateValue(foo) {
-    return foo.#privateValue;
+class A {
+  constructor() {
+    this.x = 1;
+  }
+  print() {
+    console.log(this.x);
   }
 }
 
-console.log(Foo.getPrivateValue(new Foo())); // 42
-
-
-class IncreasingCounter {
-  #count = 0;
-  get value() {
-    console.log('Getting the current value!');
-    return this.#count;
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
   }
-  increment() {
-    this.#count++;
-  }
-  static getCount(foo){
-    return foo.#count;
+  m() {
+    this.print();
   }
 }
 
-const counter = new IncreasingCounter();
-
-console.log(IncreasingCounter.getCount(counter)); // 42
+let b = new B();
+b.m() // 2
