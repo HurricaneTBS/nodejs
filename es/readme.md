@@ -36,3 +36,10 @@
 27. [编程风格](https://github.com/HurricaneTBS/nodejs/blob/0a94dd4201a16d2f811bf641339889228ad2005d/es/%E9%98%AE%E4%B8%80%E5%B3%B0--ES6/26.%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC.md)
 
 [Promise](https://github.com/HurricaneTBS/nodejs/blob/5974c2495a2458fc6e25955464d89308ecb5b729/es/note/promise.md)
+
+
+### 阮一峰--javascript
+
+
+### JavaScript设计模式与开发实践
+

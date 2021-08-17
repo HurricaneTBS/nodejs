@@ -20,5 +20,10 @@
 [typescript 英文文档](https://www.typescriptlang.org/docs/handbook/2/objects.html)
 ## mine learn
 
-### ES6
 
+## TODO
+
+- [ ] [Understanding "This" in JavaScript](https://www.codementor.io/@dariogarciamoya/understanding--this--in-javascript-du1084lyn?icn=post-8i1jca6jp&ici=post-du1084lyn)
+- [ ] 箭头函数的this指向问题
+- [ ] [箭头函数--MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+- [ ] [es6features](https://github.com/lukehoban/es6features#arrows)
