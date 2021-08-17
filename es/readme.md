@@ -1,5 +1,12 @@
 ## ES6 目录
 
+### Cash（理解的散碎知识点）
+
+1. [定时器](https://github.com/HurricaneTBS/nodejs/blob/9c92068a7cc028905cbc7ee67011c2795b5fae90/es/cash/1.%E5%AE%9A%E6%97%B6%E5%99%A8.md)
+2. [类中的this](https://github.com/HurricaneTBS/nodejs/blob/9c92068a7cc028905cbc7ee67011c2795b5fae90/es/cash/2.%E7%B1%BB%E4%B8%AD%E7%9A%84this.md)
+
+### 
+
 [let和const命令](https://github.com/HurricaneTBS/nodejs/blob/ed2dfd68d8836ac904d594197c63961d51ef2414/es/note/1.let%E5%92%8Cconst%E5%91%BD%E4%BB%A4.md)
 
 [变量的解构赋值](https://github.com/HurricaneTBS/nodejs/blob/18c169c1b3dc2226918bd564b437f3dbf087e72a/es/note/2.%E5%8F%98%E9%87%8F%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC.md)

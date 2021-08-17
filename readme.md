@@ -1,6 +1,6 @@
 ## 目录
 
-1. [ES6](https://github.com/HurricaneTBS/nodejs/blob/f64b929c20a20ab6744eeab42846f2e55e538e68/es/note/%E7%9B%AE%E5%BD%95.md)
+1. [ES6](https://github.com/HurricaneTBS/nodejs/blob/9c92068a7cc028905cbc7ee67011c2795b5fae90/es/readme.md)
 
 ## 秘籍收藏
 
@@ -19,4 +19,6 @@
 [JavaScript 标准参考教程](http://javascript.ruanyifeng.com/#toc3)
 [typescript 英文文档](https://www.typescriptlang.org/docs/handbook/2/objects.html)
 ## mine learn
+
+### ES6
 
