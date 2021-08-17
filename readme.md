@@ -1,6 +1,6 @@
 ## 目录
 
-1. [ES6](https://github.com/HurricaneTBS/nodejs/blob/9c92068a7cc028905cbc7ee67011c2795b5fae90/es/readme.md)
+1. [ES6](https://github.com/HurricaneTBS/nodejs/blob/80a98eb536153de750779153d407f3cf515ab552/es/readme.md)
 
 ## 秘籍收藏
 
