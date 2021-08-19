@@ -1,0 +1,26 @@
+*{
+    box-sizing: border-box;
+}
+
+.box{
+    width: 400px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+}
+
+.box::after{
+    position: absolute;
+    right: -100px;
+    box-sizing: border-box;
+    display: block;
+    content: "";
+    width: 100px;
+    height: 100px;
+    background-color: black;
+    border: 50px solid pink;
+    border-top-color: white;
+    border-right-color: white;
+    border-bottom-color: white;
+    /* transform: translateX(200px,0);  */
+}
