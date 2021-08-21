@@ -1,12 +1,22 @@
-function say(){
-    console.log("say");
-}
+const obj = {
+  name: "Tom",
+  age: 20,
+  country: "China",
+};
 
+const proxy = new Proxy(obj, {
+  get(target, propKey) {
+    return target[propKey];
+  },
+  set(target, propKey) {
+    if (propKey === "country") {
+      console.log("不能对国家属性做修改");
+      return;
+    }
+  },
+});
 
-function listen(){
-    console.log("listen");
-}
+console.log(proxy.name);
+proxy.country = "美国";
 
-module.exports = {
-    say,listen
-}
+console.log(proxy.country);
