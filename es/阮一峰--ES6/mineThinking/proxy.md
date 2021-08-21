@@ -152,8 +152,9 @@ console.log(obj.foo);
 - `receiver`：Proxy 对象本身
 
 下面的程序对年龄的设置做了一个拦截：
+
 1. 年龄的值不是整数，不允许赋值
-2. 年龄超过200不允许赋值
+2. 年龄超过 200 不允许赋值
 
 ```ts
 const validator = {
@@ -174,10 +175,9 @@ const validator = {
 const person = {};
 const personProxy = new Proxy(person, validator);
 
-
 personProxy.age = 100;
 
-personProxy.age // 100
-personProxy.age = 'young' // 报错
-personProxy.age = 300 // 报错
+personProxy.age; // 100
+personProxy.age = "young"; // 报错
+personProxy.age = 300; // 报错
 ```
