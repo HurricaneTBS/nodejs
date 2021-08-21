@@ -1,22 +1,24 @@
-const obj = {
-  name: "Tom",
-  age: 20,
-  country: "China",
-};
-
-const proxy = new Proxy(obj, {
-  get(target, propKey) {
-    return target[propKey];
-  },
-  set(target, propKey) {
-    if (propKey === "country") {
-      console.log("不能对国家属性做修改");
-      return;
+const validator = {
+  set(target, key, value) {
+    if (key === "age") {
+      if (!Number.isInteger(value)) {
+        throw new TypeError(`${key} must be an integer`);
+      }
+      if (value > 200) {
+        throw new RangeError(`the ${key} seems invalid`);
+      }
     }
+
+    target[key] = value;
+    return true;
   },
-});
+};
+const person = {};
+const personProxy = new Proxy(person, validator);
 
-console.log(proxy.name);
-proxy.country = "美国";
 
-console.log(proxy.country);
+personProxy.age = 100;
+
+personProxy.age // 100
+personProxy.age = 'young' // 报错
+personProxy.age = 300 // 报错

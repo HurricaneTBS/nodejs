@@ -84,3 +84,100 @@ const proxy = new Proxy(target, handler);
 | setPrototypeOf(target, proto)             | 拦截 Object.setPrototypeOf(proxy, proto)，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。                                                                                                                       |
 | apply(target, object, args)               | 拦截 Proxy 实例作为函数调用的操作，比如 proxy(...args)、proxy.call(object, ...args)、proxy.apply(...)                                                                                                                              |
 | construct(target, args)                   | 拦截 Proxy 实例作为构造函数调用的操作，比如 new proxy(...args)。                                                                                                                                                                   |
+
+## get()
+
+### get 拦截操作的基本使用
+
+`get()`方法用于拦截读取属性的操作，三个参数分别为：
+
+- `target`：目标对象
+- `propKey`： 属性名
+- `receiver`：（可选）`proxy` 实例本身
+
+下面是一个拦截读取操作的例子：
+
+```ts
+const person = {
+  name: "Tom",
+};
+
+const personHandler = {
+  get(target, propKey) {
+    if (propKey in target) {
+      return target[propKey];
+    } else {
+      throw ReferenceError(`属性名“${propKey}”不存在`);
+    }
+  },
+};
+
+const proxy = new Proxy(person, personHandler);
+
+console.log(proxy.name); // Tom
+console.log(proxy.age); // 抛出错误
+```
+
+通过拦截器可以在访问不到属性的时候抛出错误，如果没有拦截器，就只能返回 `undefined`。
+
+### get 拦截操作的继承
+
+`get` 方法可以被继承：
+
+```ts
+const target = {};
+const handler = {
+  get(target, propKey, receiver) {
+    console.log(`GET ${propKey}`);
+    return target[propKey];
+  },
+};
+const proto = new Proxy(target, handler);
+
+const obj = Object.create(proto);
+console.log(obj.foo);
+// GET foo
+// undefined
+```
+
+`Object.create(proto);`相当于复制了一个`Proxy`对象给了`obj`，所以原本的`get`拦截操作也会被复制过来。
+
+## set()
+
+`set` 方法用来拦截某个属性的赋值操作，可以接受 4 个参数：
+
+- `target`： 目标对象
+- `propKey`： 属性名
+- `value`：属性值
+- `receiver`：Proxy 对象本身
+
+下面的程序对年龄的设置做了一个拦截：
+1. 年龄的值不是整数，不允许赋值
+2. 年龄超过200不允许赋值
+
+```ts
+const validator = {
+  set(target, key, value) {
+    if (key === "age") {
+      if (!Number.isInteger(value)) {
+        throw new TypeError(`${key} must be an integer`);
+      }
+      if (value > 200) {
+        throw new RangeError(`the ${key} seems invalid`);
+      }
+    }
+
+    target[key] = value;
+    return true;
+  },
+};
+const person = {};
+const personProxy = new Proxy(person, validator);
+
+
+personProxy.age = 100;
+
+personProxy.age // 100
+personProxy.age = 'young' // 报错
+personProxy.age = 300 // 报错
+```
