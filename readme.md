@@ -27,3 +27,5 @@
 - [ ] 箭头函数的this指向问题
 - [ ] [箭头函数--MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 - [ ] [es6features](https://github.com/lukehoban/es6features#arrows)
+- [ ] 利用set方法，还可以数据绑定，即每当对象发生变化时，会自动更新 DOM。
+- [ ] Object.assign()深拷贝问题

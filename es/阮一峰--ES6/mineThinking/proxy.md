@@ -149,7 +149,7 @@ console.log(obj.foo);
 - `target`： 目标对象
 - `propKey`： 属性名
 - `value`：属性值
-- `receiver`：Proxy 对象本身
+- `receiver`：Proxy 对象本身，也就是 new Proxy({},{})。
 
 下面的程序对年龄的设置做了一个拦截：
 
@@ -181,3 +181,52 @@ personProxy.age; // 100
 personProxy.age = "young"; // 报错
 personProxy.age = 300; // 报错
 ```
+
+## apply()
+
+拦截 `Proxy` 实例作为函数调用的操作，比如 `proxy(...args)`、`proxy.call(object, ...args)`、`proxy.apply(...)`。
+
+- target：目标对象
+- object：目标对象的上下文对象（this）
+- args：目标对象的参数数组
+
+下面是一个例子：
+
+```ts
+const twice = {
+  apply(target, ctx, args) {
+    console.log(arguments); // [Arguments] { '0': [Function: sum], '1': undefined, '2': [ 1, 2 ] }
+    console.log(args);
+    return Reflect.apply(...arguments) * 2;
+  },
+};
+function sum(left, right) {
+  return left + right;
+}
+const proxy = new Proxy(sum, twice);
+proxy(1, 2); // 6
+proxy.call(null, 5, 6); // 22
+proxy.apply(null, [7, 8]); // 30
+```
+
+上面的例子中 arguments 会接受三个参数，第一个参数是 target，第二个参数是 ctx 也就是 this，第三个参数就是方法的参数组成的数组。
+
+## this 问题
+
+this 指向的是 Proxy 代理：
+
+```ts
+const target = {
+  m() {
+    console.log(this === proxy);
+  },
+};
+const handler = {};
+
+const proxy = new Proxy(target, handler);
+
+target.m(); // false
+proxy.m(); // true
+```
+上面代码中，一旦proxy代理target，target.m()内部的this就是指向proxy，而不是target。
+
