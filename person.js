@@ -1,16 +1,18 @@
-const person = {
-  name:"张三",
-  age:32
-}
+const strategies = {
+  S: function (salary) {
+    return salary * 4;
+  },
+  A: function (salary) {
+    return salary * 3;
+  },
+  B: function (salary) {
+    return salary * 2;
+  },
+};
 
+const calculateBonus = function (level, salary) {
+  return strategies[level](salary);
+};
 
-for (const [key,value] of Object.entries(person)) {
-  console.log(`${key}-----${value}`);
-}
-
-for (const key in person) {
-  if (Object.hasOwnProperty.call(person, key)) {
-    const element = person[key];
-    
-  }
-}
+console.log(calculateBonus("S", 20000)); // 输出：80000
+console.log(calculateBonus("A", 10000)); // 输出：30000

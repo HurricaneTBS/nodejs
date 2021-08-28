@@ -1,26 +1,17 @@
-const arr = [
-  "宋传明",
-  "王晶",
-  "金子俊",
-  "苏俊洋",
-  "郜振琦",
-  "裘佳瑶",
-  "赵富庆",
-  "李彤辉",
-];
+const makeSound = function (animal) {
+  animal.sound();
+};
 
-const result = [];
-let item = [];
+const Duck = function () {};
+const Chicken = function () {};
 
-while (true) {
-  const randomIndex = Math.floor(Math.random() * arr.length);
-  item.push(arr[randomIndex]);
-  arr.splice(randomIndex, 1);
-  if (item.length === 2) {
-    result.push(item);
-    item = [];
-  }
-  if (arr.length == 0) break;
-}
+Duck.prototype.sound = function () {
+  console.log("嘎嘎嘎");
+};
 
-console.log(result);
+Chicken.prototype.sound = function () {
+  console.log("咯咯咯");
+};
+
+makeSound(new Duck());
+makeSound(new Chicken());
