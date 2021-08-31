@@ -5,10 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <button id="loginBtn">登录</button>
-    <script src="./test.js"></script>
+    <div
+      id="clock"
+      role="timer"
+      aria-live="polite"
+      aria-atomic="true"
+      aria-busy="false"
+    ></div>
+
+    <script>
+      let el = document.getElementById("clock");
+      console.log(el.ariaBusy); // false
+      el.ariaBusy = "true";
+      console.log(el.ariaBusy); // true
+    </script>
   </body>
 </html>

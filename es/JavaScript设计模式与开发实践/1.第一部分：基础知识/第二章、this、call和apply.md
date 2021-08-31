@@ -4,7 +4,7 @@
 
 跟别的语言大相径庭的是，JavaScript 的 this 总是指向一个对象，而具体指向哪个对象是在运行时基于函数的执行环境动态绑定的，而非函数被声明时的环境
 
-## 2.1.1this 的指向
+## 2.1.1 this 的指向
 
 除去不常用的 with 和 eval 的情况，具体到实际应用中，this 的指向大致可以分为以下 4 种。
 
@@ -20,7 +20,7 @@
 当函数作为对象的方法被调用时，this 指向该对象：
 
 ```ts
-var obj = {
+const obj = {
   a: 1,
   getA: function () {
     alert(this === obj); // 输出：true
@@ -32,9 +32,7 @@ obj.getA();
 
 ### 2. 作为普通函数调用
 
-当函数不作为对象的属性被调用时，也就是我们常说的普通函数方式，此时的 this 总是**指向全局对象**。
-
-在浏览器的 JavaScript 里，这个全局对象是 window 对象。
+当函数不作为对象的属性被调用时，也就是我们常说的普通函数方式，此时的 this 总是指向全局对象。在浏览器的 JavaScript 里，这个全局对象是 window 对象。
 
 ```ts
 window.name = "globalName";
@@ -78,12 +76,22 @@ console.log(getName()); // globalName
 
 ```ts
 document.getElementById("div1").onclick = function () {
-  var that = this; // 保存div的引用
-  var callback = function () {
+  const that = this; // 保存div的引用
+  const callback = function () {
     alert(that.id); // 输出：'div1'
   };
   callback();
 };
+```
+
+在 ECMAScript 5 的 strict 模式下，这种情况下的 this 已经被规定为不会指向全局对象，而是 undefined：
+
+```ts
+function func() {
+  "use strict";
+  alert(this); // 输出：undefined
+}
+func();
 ```
 
 ### 3. 构造器调用
@@ -103,42 +111,40 @@ alert(obj.name); // 输出：sven
 但用 new 调用构造器时，还要注意一个问题，如果构造器显式地返回了一个 object 类型的对象，那么此次运算结果最终会返回这个对象，而不是我们之前期待的 this：
 
 ```ts
-var MyClass = function () {
+const MyClass = function () {
   this.name = "sven";
   return {
     // 显式地返回一个对象
     name: "anne",
   };
 };
-var obj = new MyClass();
+const obj = new MyClass();
 alert(obj.name); // 输出：anne
 ```
-
-此时 new 出来的不是 MyClass 类，而是`{name:"anne"}`对象。
 
 如果构造器不显式地返回任何数据，或者是返回一个非对象类型的数据，就不会造成上述问题：
 
 ```ts
-var MyClass = function () {
+const MyClass = function () {
   this.name = "sven";
   return "anne"; // 返回string类型
 };
-var obj = new MyClass();
+const obj = new MyClass();
 alert(obj.name); // 输出：sven
 ```
 
 ### 4. Function.prototype.call 或 Function.prototype.apply 调用
 
-跟普通的函数调用相比，用 Function.prototype.call 或 Function.prototype.apply 可以动态地改变传入函数的 this
+跟普通的函数调用相比，用 Function.prototype.call 或 Function.prototype.apply 可以动态地改变传入函数的 this：
 
 ```ts
-var obj1 = {
+const obj1 = {
   name: "sven",
   getName: function () {
     return this.name;
   },
 };
-var obj2 = {
+const obj2 = {
   name: "anne",
 };
 console.log(obj1.getName()); // 输出: sven
@@ -149,15 +155,17 @@ call 和 apply 方法能很好地体现 JavaScript 的函数式语言特性，�
 
 ## 2.1.2 丢失的 this
 
+这是一个经常遇到的问题，我们先看下面的代码：
+
 ```ts
-var obj = {
+const obj = {
   myName: "sven",
   getName: function () {
     return this.myName;
   },
 };
 console.log(obj.getName()); // 输出：'sven'
-var getName2 = obj.getName;
+const getName2 = obj.getName;
 console.log(getName2()); // 输出：undefined
 ```
 
@@ -168,7 +176,7 @@ console.log(getName2()); // 输出：undefined
 再看另一个例子，document.getElementById 这个方法名实在有点过长，我们大概尝试过用一个短的函数来代替它，如同 prototype.js 等一些框架所做过的事情：
 
 ```ts
-var getId = function (id) {
+const getId = function (id) {
   return document.getElementById(id);
 };
 getId("div1");
@@ -182,7 +190,7 @@ getId("div1");
     <div id="div1">我是一个div</div>
   </body>
   <script>
-    var getId = document.getElementById;
+    const getId = document.getElementById;
     getId("div1");
   </script>
 </html>
@@ -200,8 +208,8 @@ document.getElementById = (function (func) {
     return func.apply(document, arguments);
   };
 })(document.getElementById);
-var getId = document.getElementById;
-var div = getId("div1");
+const getId = document.getElementById;
+const div = getId("div1");
 alert(div.id); // 输出： div1
 ```
 
@@ -216,7 +224,7 @@ Function.prototype.call 和 Function.prototype.apply 都是非常常用的方法
 apply 接受两个参数，第一个参数指定了函数体内 this 对象的指向，第二个参数为一个带下标的集合，这个集合可以为数组，也可以为类数组，apply 方法把这个集合中的元素作为参数传递给被调用的函数：
 
 ```ts
-var func = function (a, b, c) {
+const func = function (a, b, c) {
   alert([a, b, c]); // 输出 [ 1, 2, 3 ]
 };
 func.apply(null, [1, 2, 3]);
@@ -227,7 +235,7 @@ func.apply(null, [1, 2, 3]);
 call 传入的参数数量不固定，跟 apply 相同的是，第一个参数也是代表函数体内的 this 指向，从第二个参数开始往后，每个参数被依次传入函数：
 
 ```ts
-var func = function (a, b, c) {
+const func = function (a, b, c) {
   alert([a, b, c]); // 输出 [ 1, 2, 3 ]
 };
 func.call(null, 1, 2, 3);
@@ -240,7 +248,7 @@ call 是包装在 apply 上面的一颗语法糖，如果我们明确地知道�
 当使用 call 或者 apply 的时候，如果我们传入的第一个参数为 null，函数体内的 this 会指向默认的宿主对象，在浏览器中则是 window：
 
 ```ts
-var func = function (a, b, c) {
+const func = function (a, b, c) {
   alert(this === window); // 输出true
 };
 func.apply(null, [1, 2, 3]);
@@ -249,7 +257,7 @@ func.apply(null, [1, 2, 3]);
 但如果是在严格模式下，函数体内的 this 还是为 null：
 
 ```ts
-var func = function (a, b, c) {
+const func = function (a, b, c) {
   "use strict";
   alert(this === null); // 输出true
 };
@@ -270,21 +278,24 @@ console.log(Math.max(1, 2, 3, 4, 5));
 Math.max.apply(null, [1, 2, 5, 3, 4]); // 输出：5
 ```
 
-## 2.2.2call 和 apply 的用途
+## 2.2.2 call 和 apply 的用途
 
-前面说过，能够熟练使用 call 和 apply，是我们真正成为一名 JavaScript 程序员的重要一步，本节我们将详细介绍 call 和 apply 在实际开发中的用途
+前面说过，能够熟练使用 call 和 apply，是我们真正成为一名 JavaScript 程序员的重要一步，本节我们将详细介绍 call 和 apply 在实际开发中的用途。
 
 ### 1. 改变 this 指向
 
 call 和 apply 最常见的用途是改变函数内部的 this 指向，我们来看个例子：
 
 ```ts
-var obj1 = { name: "sven" };
-var obj2 = { name: "anne" };
+const obj1 = { name: "sven" };
+const obj2 = { name: "anne" };
+
 window.name = "window";
-var getName = function () {
+
+const getName = function () {
   alert(this.name);
 };
+
 getName(); // 输出: window
 getName.call(obj1); // 输出: sven
 getName.call(obj2); // 输出: anne
@@ -293,7 +304,7 @@ getName.call(obj2); // 输出: anne
 当执行 getName.call( obj1 )这句代码时，getName 函数体内的 this 就指向 obj1 对象，所以此处的
 
 ```ts
-var getName = function () {
+const getName = function () {
   alert(this.name);
 };
 ```
@@ -310,7 +321,7 @@ var getName = function () {
 
 ```ts
 document.getElementById("div1").onclick = function () {
-  alert(this.id); // 输出：div1
+  console.log(this.id); // 输出：div1
 };
 ```
 
@@ -330,8 +341,8 @@ document.getElementById("div1").onclick = function () {
 
 ```ts
 document.getElementById("div1").onclick = function () {
-  var func = function () {
-    alert(this.id); // 输出：div1
+  const func = function () {
+    console.log(this.id); // 输出：div1
   };
   func.call(this);
 };
@@ -345,36 +356,46 @@ document.getElementById = (function (func) {
     return func.apply(document, arguments);
   };
 })(document.getElementById);
-var getId = document.getElementById;
-var div = getId("div1");
-alert(div.id); // 输出： div1
+
+const getId = document.getElementById;
+
+const div = getId("div1");
+
+console.log(div.id); // 输出： div1
 ```
 
-2. Function.prototype.bind
+### 2. Function.prototype.bind
 
 大部分高级浏览器都实现了内置的`Function.prototype.bind`，用来指定函数内部的`this`指向，即使没有原生的`Function.prototype.bind`实现，我们来模拟一个也不是难事，代码如下：
 
 ```ts
 Function.prototype.bind = function (context) {
-  var self = this; // 保存原函数
+  const self = this; // 保存原函数
   return function () {
     // 返回一个新的函数
     return self.apply(context, arguments); // 执行新的函数的时候，会把之前传入的context
     // 当作新函数体内的this
   };
 };
-var obj = { name: "sven" };
-var func = function () {
+
+const obj = { name: "sven" };
+
+const func = function () {
   alert(this.name); // 输出：sven
 }.bind(obj);
+
 func();
 ```
 
-我们通过`Function.prototype.bind`来“包装”`func`函数，并且传入一个对象`context`当作参数，这个`context`对象就是我们想修正的`this`对象。在 `Function.prototype.bind` 的内部实现中，我们先把 `func` 函数的引用保存起来，然后返回一个新的函数。当我们在将来执行 `func` 函数时，实际上先执行的是这个刚刚返回的新函数。在新函数内部，`self.apply( context, arguments )`这句代码才是执行原来的 `func` 函数，并且指定 `context` 对象为 `func` 函数体内的 `this`。这是一个简化版的 `Function.prototype.bind` 实现，通常我们还会把它实现得稍微复杂一点，使得可以往 `func` 函数中预先填入一些参数：
+我们通过`Function.prototype.bind`来“包装”`func`函数，并且传入一个对象`context`当作参数，这个`context`对象就是我们想修正的`this`对象。
+
+在 `Function.prototype.bind` 的内部实现中，我们先把 `func` 函数的引用保存起来，然后返回一个新的函数。当我们在将来执行 `func` 函数时，实际上先执行的是这个刚刚返回的新函数。在新函数内部，`self.apply( context, arguments )`这句代码才是执行原来的 `func` 函数，并且指定 `context` 对象为 `func` 函数体内的 `this`。
+
+这是一个简化版的 `Function.prototype.bind` 实现，通常我们还会把它实现得稍微复杂一点，使得可以往 `func` 函数中预先填入一些参数：
 
 ```ts
 Function.prototype.bind = function () {
-  var self = this, // 保存原函数
+  const self = this, // 保存原函数
     context = [].shift.call(arguments), // 需要绑定的this上下文
     args = [].slice.call(arguments); // 剩余的参数转成数组
   return function () {
@@ -385,35 +406,41 @@ Function.prototype.bind = function () {
   };
 };
 
-var obj = { name: "sven" };
-var func = function (a, b, c, d) {
-  alert(this.name); // 输出：sven
-  alert([a, b, c, d]); // 输出：[ 1, 2, 3, 4 ]
+const obj = { name: "sven" };
+
+const func = function (a, b, c, d) {
+  console.log(this.name); // 输出：sven
+  console.log([a, b, c, d]); // 输出：[ 1, 2, 3, 4 ]
 }.bind(obj, 1, 2);
+
 func(3, 4);
 ```
 
-3. 借用其他对象的方法
+### 3. 借用其他对象的方法
 
 我们知道，杜鹃既不会筑巢，也不会孵雏，而是把自己的蛋寄托给云雀等其他鸟类，让它们代为孵化和养育。同样，在`JavaScript`中也存在类似的借用现象。借用方法的第一种场景是“借用构造函数”，通过这种技术，可以实现一些类似继承的效果：
 
 借用方法的第一种场景是“借用构造函数”，通过这种技术，可以实现一些类似继承的效果：
 
 ```ts
-var A = function (name) {
+const A = function (name) {
   this.name = name;
 };
-var B = function () {
+
+const B = function () {
   A.apply(this, arguments);
 };
+
 B.prototype.getName = function () {
   return this.name;
 };
-var b = new B("sven");
+
+const b = new B("sven");
 console.log(b.getName()); // 输出： 'sven'
 ```
 
 借用方法的第二种运用场景跟我们的关系更加密切。
+
 函数的参数列表 `arguments` 是一个类数组对象，虽然它也有“下标”，但它并非真正的数组，所以也不能像数组一样，进行排序操作或者往集合里添加一个新的元素。这种情况下，我们常常会借用 `Array.prototype` 对象上的方法。比如想往 `arguments` 中添加一个新的元素，通常会借用 `Array.prototype.push`：
 
 ```ts
@@ -423,3 +450,4 @@ console.log(b.getName()); // 输出： 'sven'
 })(1, 2);
 ```
 
+在操作 arguments 的时候，我们经常非常频繁地找 Array.prototype 对象借用方法。

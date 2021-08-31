@@ -159,13 +159,94 @@ str = 2;    // 报错
 public class Duck {        // 鸭子类
     public void makeSound(){
         System.out.println( "嘎嘎嘎" );
-    } 
+    }
+}
+
+public class Chicken {        // 鸡类
+  public void makeSound(){
+    System.out.println( "咯咯咯" );
+  }
+}
+
+public class AnimalSound {
+  public void makeSound( Duck duck ){    // (1)
+    duck.makeSound();
+  }
+}
+
+public class Test {
+  public static void main( String args[] ){
+    AnimalSound animalSound = new AnimalSound();
+    Duck duck = new Duck();
+    animalSound.makeSound( duck );    // 输出：嘎嘎嘎
+  }
 }
 ```
 
+我们已经顺利地让鸭子可以发出叫声，但如果现在想让鸡也叫唤起来，我们发现这是一件不可能实现的事情。因为(1)处 AnimalSound 类的 makeSound 方法，被我们规定为只能接受 Duck 类型的参数：
+
+```java
+public class Test {
+  public static void main( String args[] ){
+    AnimalSound animalSound = new AnimalSound();
+    Chicken chicken = new Chicken();
+    animalSound.makeSound( chicken );    // 报错，只能接受Duck类型的参数
+  }
+}
+```
+
+某些时候，在享受静态语言类型检查带来的安全性的同时，我们亦会感觉被束缚住了手脚。
+
+为了解决这一问题，静态类型的面向对象语言通常被设计为可以向上转型：当给一个类变量赋值时，这个变量的类型既可以使用这个类本身，也可以使用这个类的超类。这就像我们在描述天上的一只麻雀或者一只喜鹊时，通常说“一只麻雀在飞”或者“一只喜鹊在飞”。但如果想忽略它们的具体类型，那么也可以说“一只鸟在飞”。
+
+同理，当 Duck 对象和 Chicken 对象的类型都被隐藏在超类型 Animal 身后，Duck 对象和 Chicken 对象就能被交换使用，这是让对象表现出多态性的必经之路，而多态性的表现正是实现众多设计模式的目标。
+
 ## 1.2.4 使用继承得到多态效果
 
-java 的内容
+使用继承来得到多态效果，是让对象表现出多态性的最常用手段。继承通常包括实现继承和接口继承。本节我们讨论实现继承，接口继承的例子请参见第 21 章。
+
+我们先创建一个 Animal 抽象类，再分别让 Duck 和 Chicken 都继承自 Animal 抽象类，下述代码中(1)处和(2)处的赋值语句显然是成立的，因为鸭子和鸡也是动物：
+
+```java
+public abstract class Animal {
+  abstract void makeSound();   // 抽象方法
+}
+
+public class Chicken extends Animal{
+  public void makeSound(){
+    System.out.println( "咯咯咯" );
+  }
+}
+
+public class Duck extends Animal{
+  public void makeSound(){
+    System.out.println( "嘎嘎嘎" );
+  }
+}
+
+Animal duck = new Duck();       // (1)
+Animal chicken = new Chicken();    // (2)
+```
+
+现在剩下的就是让 AnimalSound 类的 makeSound 方法接受 Animal 类型的参数，而不是具体的 Duck 类型或者 Chicken 类型：
+
+```java
+public class AnimalSound{
+  public void makeSound( Animal animal ){    // 接受Animal类型的参数
+    animal.makeSound();
+  }
+}
+
+public class Test {
+  public static void main( String args[] ){
+    AnimalSound animalSound= new AnimalSound ();
+    Animal duck = new Duck();
+    Animal chicken = new Chicken();
+    animalSound.makeSound( duck );    // 输出嘎嘎嘎
+    animalSound.makeSound( chicken );        // 输出咯咯咯
+  }
+}
+```
 
 ## 1.2.5 JavaScript 的多态
 
@@ -194,6 +275,8 @@ Martin Fowler 的话可以用下面这个例子很好地诠释：
 利用对象的多态性，导演在发布消息时，就不必考虑各个对象接到消息后应该做什么。对象应该做什么并不是临时决定的，而是已经事先约定和排练完毕的。每个对象应该做什么，已经成为了该对象的一个方法，被安装在对象的内部，每个对象负责它们自己的行为。所以这些对象可以根据同一个消息，有条不紊地分别进行各自的工作。
 
 `将行为分布在各个对象中，并让这些对象各自负责自己的行为，这正是面向对象设计的优点。`
+
+再看一个现实开发中遇到的例子，这个例子的思想和动物叫声的故事非常相似。
 
 假设我们要编写一个地图应用，现在有两家可选的地图 API 提供商供我们接入自己的应用。目前我们选择的是谷歌地图，谷歌地图的 API 中提供了 show 方法，负责在页面上展示整个地图。示例代码如下：
 
@@ -348,7 +431,7 @@ console.log(myObject.__name); // 输出：undefined
 
 从《设计模式》副标题“可复用面向对象软件的基础”可以知道，这本书理应教我们如何编写可复用的面向对象程序。这本书把大多数笔墨都放在如何封装变化上面，这跟编写可复用的面向对象程序是不矛盾的。当我们想办法把程序中变化的部分封装好之后，剩下的即是稳定而可复用的部分了。
 
-# 原型模式和基于原型继承的 JavaScript 对象系统
+# 1.4 原型模式和基于原型继承的 JavaScript 对象系统
 
 在 Brendan Eich 为 JavaScript 设计面向对象系统时，借鉴了 Self 和 Smalltalk 这两门基于原型的语言。之所以选择基于原型的面向对象系统，并不是因为时间匆忙，它设计起来相对简单，而是因为从一开始 Brendan Eich 就没有打算在 JavaScript 中加入类的概念。
 
@@ -371,16 +454,16 @@ console.log(myObject.__name); // 输出：undefined
 原型模式的实现关键，是语言本身是否提供了 clone 方法。ECMAScript 5 提供了 Object.create 方法，可以用来克隆对象。代码如下：
 
 ```ts
-var Plane = function () {
+const Plane = function () {
   this.blood = 100;
   this.attackLevel = 1;
   this.defenseLevel = 1;
 };
-var plane = new Plane();
+const plane = new Plane();
 plane.blood = 500;
 plane.attackLevel = 10;
 plane.defenseLevel = 7;
-var clonePlane = Object.create(plane);
+const clonePlane = Object.create(plane);
 console.log(clonePlane); // 输出：Object {blood: 500, attackLevel: 10, defenseLevel: 7}
 ```
 
@@ -392,7 +475,280 @@ console.log(clonePlane); // 输出：Object {blood: 500, attackLevel: 10, defens
 
 原型模式提供了另外一种创建对象的方式，通过克隆对象，我们就不用再关心对象的具体类型名字。这就像一个仙女要送给三岁小女孩生日礼物，虽然小女孩可能还不知道飞机或者船怎么说，但她可以指着商店橱柜里的飞机模型说“我要这个”。
 
-当然在 JavaScript 这种类型模糊的语言中，创建对象非常容易，也不存在类型耦合的问题。从设计模式的角度来讲，原型模式的意义并不算大。但 JavaScript 本身是一门基于原型的面向对象语言，它的对象系统就是使用原型模式来搭建的，在这里称之为原型编程范型也许更合适
+当然在 JavaScript 这种类型模糊的语言中，创建对象非常容易，也不存在类型耦合的问题。从设计模式的角度来讲，原型模式的意义并不算大。但 JavaScript 本身是一门基于原型的面向对象语言，它的对象系统就是使用原型模式来搭建的，在这里称之为原型编程范型也许更合适。
+
+## 1.4.3 体验 Io 语言
+
+前面说过，原型模式不仅仅是一种设计模式，也是一种编程范型。JavaScript 就是使用原型模式来搭建整个面向对象系统的。在 JavaScript 语言中不存在类的概念，对象也并非从类中创建出来的，所有的 JavaScript 对象都是从某个对象上克隆而来的。
+
+对于习惯了以类为中心语言的人来说，也许一时不容易理解这种基于原型的语言。即使是对于 JavaScript 语言的熟练使用者而言，也可能会有一种“不识庐山真面目，只缘身在此山中”的感觉。事实上，使用原型模式来构造面向对象系统的语言远非仅有 JavaScript 一家。
+
+JavaScript 基于原型的面向对象系统参考了 Self 语言和 Smalltalk 语言，为了搞清 JavaScript 中的原型，我们本该寻根溯源去瞧瞧这两门语言。但由于这两门语言距离现在实在太遥远，我们不妨转而了解一下另外一种轻巧又基于原型的语言——Io 语言。
+
+Io 语言在 2002 年由 Steve Dekorte 发明。可以从http://iolanguage.com下载到Io语言的解释器，安装好之后打开Io解释器，输入经典的“Hello World”程序。解释器打印出了 Hello World 的字符串，这说明我们已经可以使用 Io 语言来编写一些小程序了。
+
+作为一门基于原型的语言，Io 中同样没有类的概念，每一个对象都是基于另外一个对象的克隆。
+
+就像吸血鬼的故事里必然有一个吸血鬼祖先一样，既然每个对象都是由其他对象克隆而来的，那么我们猜测 Io 语言本身至少要提供一个根对象，其他对象都发源于这个根对象。这个猜测是正确的，在 Io 中，根对象名为 Object。
+
+这一节我们依然拿动物世界的例子来讲解 Io 语言。在下面的代码中，通过克隆根对象 Object，就可以得到另外一个对象 Animal。虽然 Animal 是以大写开头的，但是记住 Io 中没有类，Animal 跟所有的数据一样都是对象。
+
+```
+Animal := Object clone    // 克隆动物对象
+```
+
+现在通过克隆根对象 Object 得到了一个新的 Animal 对象，所以 Object 就被称为 Animal 的原型。目前 Animal 对象和它的原型 Object 对象一模一样，还没有任何属于它自己方法和能力。我们假设在 Io 的世界里，所有的动物都会发出叫声，那么现在就给 Animal 对象添加 makeSound 方法吧。代码如下：
+
+```
+Animal makeSound := method( "animal makeSound " print );
+```
+
+好了，现在所有的动物都能够发出叫声了，那么再来继续创建一个 Dog 对象。显而易见，Animal 对象可以作为 Dog 对象的原型，Dog 对象从 Animal 对象克隆而来：
+
+```
+Dog := Animal clone
+```
+
+可以确定，Dog 一定懂得怎么吃食物，所以接下来给 Dog 对象添加 eat 方法：
+
+```
+Dog eat = method( "dog eat " print );
+```
+
+现在已经完成了整个动物世界的构建，通过一次次克隆，Io 的对象世界里不再只有形单影只的根对象 Object，而是多了两个新的对象：Animal 对象和 Dog 对象。其中 Dog 的原型是 Animal，Animal 对象的原型是 Object。最后我们来测试 Animal 对象和 Dog 对象的功能。
+
+先尝试调用 Animal 的 makeSound 方法，可以看到，动物顺利发出了叫声：
+
+```
+Animal makeSound      // 输出：animal makeSound
+```
+
+然后再调用 Dog 的 eat 方法，同样我们也看到了预期的结果：
+
+```
+Dog eat    // 输出：dog eat
+```
+
+## 1.4.4 原型编程范型的一些规则
+
+从上一节的讲解中，我们看到了如何在 Io 语言中从无到有地创建一些对象。跟使用“类”的语言不一样的地方是，Io 语言中最初只有一个根对象 Object，其他所有的对象都克隆自另外一个对象。如果 A 对象是从 B 对象克隆而来的，那么 B 对象就是 A 对象的原型。
+
+在上一小节的例子中，Object 是 Animal 的原型，而 Animal 是 Dog 的原型，它们之间形成了一条原型链。这个原型链是很有用处的，当我们尝试调用 Dog 对象的某个方法时，而它本身却没有这个方法，那么 Dog 对象会把这个请求委托给它的原型 Animal 对象，如果 Animal 对象也没有这个属性，那么请求会顺着原型链继续被委托给 Animal 对象的原型 Object 对象，这样一来便能得到继承的效果，看起来就像 Animal 是 Dog 的“父类”，Object 是 Animal 的“父类”。
+
+这个机制并不复杂，却非常强大，Io 和 JavaScript 一样，基于原型链的委托机制就是原型继承的本质。
+
+我们来进行一些测试。在 Io 的解释器中执行 Dog makeSound 时，Dog 对象并没有 makeSound 方法，于是把请求委托给了它的原型 Animal 对象，而 Animal 对象是有 makeSound 方法的，所以该条语句可以顺利得到输出，如图 1-2 所示。
+
+现在我们明白了原型编程中的一个重要特性，即当对象无法响应某个请求时，会把该请求委托给它自己的原型。
+
+最后整理一下本节的描述，我们可以发现原型编程范型至少包括以下基本规则。
+
+- 所有的数据都是对象
+- 要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它。
+- 对象会记住它的原型。
+- 如果对象无法响应某个请求，它会把这个请求委托给它自己的原型。
+
+## 1.4.5 JavaScript 中的原型继承
+
+刚刚我们已经体验过同样是基于原型编程的 Io 语言，也已经了解了在 Io 语言中如何通过原型链来实现对象之间的继承关系。在原型继承方面，JavaScript 的实现原理和 Io 语言非常相似，JavaScript 也同样遵守这些原型编程的基本规则。
+
+- 所有的数据都是对象。
+- 要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它。
+- 对象会记住它的原型。
+- 如果对象无法响应某个请求，它会把这个请求委托给它自己的原型。
+
+下面我们来分别讨论 JavaScript 是如何在这些规则的基础上来构建它的对象系统的。
+
+### 1. 所有的数据都是对象
+
+JavaScript 在设计的时候，模仿 Java 引入了两套类型机制：基本类型和对象类型。基本类型包括 undefined、number、boolean、string、function、object。从现在看来，这并不是一个好的想法。
+
+按照 JavaScript 设计者的本意，除了 undefined 之外，一切都应是对象。为了实现这一目标，number、boolean、string 这几种基本类型数据也可以通过“包装类”的方式变成对象类型数据来处理。
+
+我们不能说在 JavaScript 中所有的数据都是对象，但可以说绝大部分数据都是对象。那么相信在 JavaScript 中也一定会有一个根对象存在，这些对象追根溯源都来源于这个根对象。
+
+事实上，JavaScript 中的根对象是 Object.prototype 对象。Object.prototype 对象是一个空的对象。我们在 JavaScript 遇到的每个对象，实际上都是从 Object.prototype 对象克隆而来的，Object.prototype 对象就是它们的原型。比如下面的 obj1 对象和 obj2 对象：
+
+```ts
+const obj1 = new Object();
+const obj2 = {};
+```
+
+可以利用 ECMAScript 5 提供的 Object.getPrototypeOf 来查看这两个对象的原型：
+
+```ts
+console.log(Object.getPrototypeOf(obj1) === Object.prototype); // 输出：true
+console.log(Object.getPrototypeOf(obj2) === Object.prototype); // 输出：true
+```
+
+### 2. 要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它
+
+在 Io 语言中，克隆一个对象的动作非常明显，我们可以在代码中清晰地看到 clone 的过程。比如以下代码：
+
+```
+Dog :=  Animal clone
+```
+
+但在 JavaScript 语言里，我们并不需要关心克隆的细节，因为这是引擎内部负责实现的。我们所需要做的只是显式地调用 var obj1 = new Object()或者 var obj2 = {}。此时，引擎内部会从 Object.prototype 上面克隆一个对象出来，我们最终得到的就是这个对象。
+
+再来看看如何用 new 运算符从构造器中得到一个对象，下面的代码我们再熟悉不过了：
+
+```ts
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.getName = function () {
+  return this.name;
+};
+const a = new Person("sven");
+console.log(a.name); // 输出：sven
+console.log(a.getName()); // 输出：sven
+console.log(Object.getPrototypeOf(a) === Person.prototype); // 输出：true
+```
+
+在 JavaScript 中没有类的概念，这句话我们已经重复过很多次了。但刚才不是明明调用了 new Person()吗？
+
+在这里 Person 并不是类，而是函数构造器，JavaScript 的函数既可以作为普通函数被调用，也可以作为构造器被调用。当使用 new 运算符来调用函数时，此时的函数就是一个构造器。用 new 运算符来创建对象的过程，实际上也只是先克隆 Object.prototype 对象，再进行一些其他额外操作的过程。
+
+在 Chrome 和 Firefox 等向外暴露了对象`__proto__`属性的浏览器下，我们可以通过下面这段代码来理解 new 运算的过程：
+
+```ts
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.getName = function () {
+  return this.name;
+};
+
+const objectFactory = function () {
+  const obj = new Object(), // 从Object.prototype上克隆一个空的对象
+    Constructor = [].shift.call(arguments); // 取得外部传入的构造器，此例是Person
+
+  obj.__proto__ = Constructor.prototype; // 指向正确的原型
+  const ret = Constructor.apply(obj, arguments); // 借用外部传入的构造器给obj设置属性
+  return typeof ret === "object" ? ret : obj; // 确保构造器总是会返回一个对象
+};
+
+const a = objectFactory(Person, "sven");
+console.log(a.name); // 输出：sven
+console.log(a.getName()); // 输出：sven
+console.log(Object.getPrototypeOf(a) === Person.prototype); // 输出：true
+```
+
+我们看到，分别调用下面两句代码产生了一样的结果：
+
+```ts
+const a = objectFactory(A, "sven");
+const a = new A("sven");
+```
+
+### 3. 对象会记住它的原型
+
+如果请求可以在一个链条中依次往后传递，那么每个节点都必须知道它的下一个节点。同理，要完成 Io 语言或者 JavaScript 语言中的原型链查找机制，每个对象至少应该先记住它自己的原型。
+
+目前我们一直在讨论“对象的原型”，就 JavaScript 的真正实现来说，其实并不能说对象有原型，而只能说对象的构造器有原型。对于“对象把请求委托给它自己的原型”这句话，更好的说法是对象把请求委托给它的构造器的原型。那么对象如何把请求顺利地转交给它的构造器的原型呢？
+
+JavaScript 给对象提供了一个名为**proto**的隐藏属性，某个对象的**proto**属性默认会指向它的构造器的原型对象，即{Constructor}.prototype。在一些浏览器中，**proto**被公开出来，我们可以在 Chrome 或者 Firefox 上用这段代码来验证：
+
+```ts
+const a = new Object();
+console.log(a.__proto__ === Object.prototype); // 输出：true
+```
+
+实际上，**proto**就是对象跟“对象构造器的原型”联系起来的纽带。正因为对象要通过**proto**属性来记住它的构造器的原型，所以我们用上一节的 objectFactory 函数来模拟用 new 创建对象时，需要手动给 obj 对象设置正确的**proto**指向。
+
+```ts
+obj.__proto__ = Constructor.prototype;
+```
+
+通过这句代码，我们让 obj.**proto**指向 Person.prototype，而不是原来的 Object.prototype。
+
+### 4. 如果对象无法响应某个请求，它会把这个请求委托给它的构造器的原型
+
+这条规则即是原型继承的精髓所在。从对 Io 语言的学习中，我们已经了解到，当一个对象无法响应某个请求的时候，它会顺着原型链把请求传递下去，直到遇到一个可以处理该请求的对象为止。
+
+JavaScript 的克隆跟 Io 语言还有点不一样，Io 中每个对象都可以作为原型被克隆，当 Animal 对象克隆自 Object 对象，Dog 对象又克隆自 Animal 对象时，便形成了一条天然的原型链，如图 1-3 所示。
+
+(Dog)--->(Animal)--->(Object)
+
+而在 JavaScript 中，每个对象都是从 Object.prototype 对象克隆而来的，如果是这样的话，我们只能得到单一的继承关系，即每个对象都继承自 Object.prototype 对象，这样的对象系统显然是非常受限的。
+
+实际上，虽然 JavaScript 的对象最初都是由 Object.prototype 对象克隆而来的，但对象构造器的原型并不仅限于 Object.prototype 上，而是可以动态指向其他对象。这样一来，当对象 a 需要借用对象 b 的能力时，可以有选择性地把对象 a 的构造器的原型指向对象 b，从而达到继承的效果。下面的代码是我们最常用的原型继承方式：
+
+```ts
+const obj = { name: "sven" };
+const A = function () {};
+A.prototype = obj;
+const a = new A();
+console.log(a.name); // 输出：sven
+```
+
+我们来看看执行这段代码的时候，引擎做了哪些事情。
+
+- 首先，尝试遍历对象 a 中的所有属性，但没有找到 name 这个属性。
+- 查找 name 属性的这个请求被委托给对象 a 的构造器的原型，它被 a.**proto**记录着并且指向 A.prototype，而 A.prototype 被设置为对象 obj。
+- 在对象 obj 中找到了 name 属性，并返回它的值。
+
+当我们期望得到一个“类”继承自另外一个“类”的效果时，往往会用下面的代码来模拟实现：
+
+```ts
+const A = function () {};
+A.prototype = { name: "sven" };
+const B = function () {};
+B.prototype = new A();
+const b = new B();
+console.log(b.name); // 输出：sven
+```
+
+再看这段代码执行的时候，引擎做了什么事情。
+
+- 首先，尝试遍历对象 b 中的所有属性，但没有找到 name 这个属性。
+- 查找 name 属性的请求被委托给对象 b 的构造器的原型，它被 `b.__proto__`记录着并且指向 B.prototype，而 B.prototype 被设置为一个通过 new A()创建出来的对象。
+- 在该对象中依然没有找到 name 属性，于是请求被继续委托给这个对象构造器的原型 A.prototype。
+- 在 A.prototype 中找到了 name 属性，并返回它的值。
+
+和把 B.prototype 直接指向一个字面量对象相比，通过 B.prototype = new A()形成的原型链比之前多了一层。但二者之间没有本质上的区别，都是将对象构造器的原型指向另外一个对象，继承总是发生在对象和对象之间。
+
+最后还要留意一点，原型链并不是无限长的。现在我们尝试访问对象 a 的 address 属性。而对象 b 和它构造器的原型上都没有 address 属性，那么这个请求会被最终传递到哪里呢？
+
+实际上，当请求达到 A.prototype，并且在 A.prototype 中也没有找到 address 属性的时候，请求会被传递给 A.prototype 的构造器原型 Object.prototype，显然 Object.prototype 中也没有 address 属性，但 Object.prototype 的原型是 null，说明这时候原型链的后面已经没有别的节点了。所以该次请求就到此打住，a.address 返回 undefined
+
+```ts
+a.address; // 输出：undefined
+```
+
+## 1.4.6 原型继承的未来
+
+设计模式在很多时候其实都体现了语言的不足之处。Peter Norvig 曾说，设计模式是对语言不足的补充，如果要使用设计模式，不如去找一门更好的语言。这句话非常正确。不过，作为 Web 前端开发者，相信 JavaScript 在未来很长一段时间内都是唯一的选择。虽然我们没有办法换一门语言，但语言本身也在发展，说不定哪天某个模式在 JavaScript 中就已经是天然的存在，不再需要拐弯抹角来实现。比如 Object.create 就是原型模式的天然实现。使用 Object.create 来完成原型继承看起来更能体现原型模式的精髓。目前大多数主流浏览器都提供了 Object.create 方法。
+
+但美中不足是在当前的 JavaScript 引擎下，通过 Object.create 来创建对象的效率并不高，通常比通过构造函数创建对象要慢。此外还有一些值得注意的地方，比如通过设置构造器的 prototype 来实现原型继承的时候，除了根对象 Object.prototype 本身之外，任何对象都会有一个原型。而通过 Object.create( null )可以创建出没有原型的对象。
+
+另外，ECMAScript 6 带来了新的 Class 语法。这让 JavaScript 看起来像是一门基于类的语言，但其背后仍是通过原型机制来创建对象。通过 Class 创建对象的一段简单示例代码 ① 如下所示：
+
+```ts
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+  getName() {
+    return this.name;
+  }
+}
+class Dog extends Animal {
+  constructor(name) {
+    super(name);
+  }
+  speak() {
+    return "woof";
+  }
+}
+const dog = new Dog("Scamp");
+console.log(dog.getName() + " says " + dog.speak());
+```
+
+## 1.4.7 小结
+
+本节讲述了本书的第一个设计模式——原型模式。原型模式是一种设计模式，也是一种编程泛型，它构成了 JavaScript 这门语言的根本。本节首先通过更加简单的 Io 语言来引入原型模式的概念，随后学习了 JavaScript 中的原型模式。原型模式十分重要，和 JavaScript 开发者的关系十分密切。通过原型来实现的面向对象系统虽然简单，但能力同样强大。
 
 最后整理一下本节的描述，我们可以发现原型编程范型至少包括以下基本规则。
 
