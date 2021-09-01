@@ -31,5 +31,6 @@
 - [ ] Object.assign()深拷贝问题
 - [ ] Element.closest() 做点击其他地方隐藏目标框[案例](https://codepen.io/StrengthandFreedom/pen/1fc445ec99603fe7c1d42d467f3add4c)、[文章](https://techstacker.com/close-modal-click-outside-vanilla-javascript/)
 
-
+- [ ] [URL](https://developer.mozilla.org/zh-CN/docs/Web/API/URL)
+- [ ] [URLSearchParams](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams)
 

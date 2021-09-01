@@ -1,50 +1,71 @@
 <html>
   <body>
-    <button id="replay">播放录像</button>
+    <button id="button">按我</button>
   </body>
   <script>
-    var Ryu = {
-      attack: function () {
-        console.log("攻击");
-      },
-      defense: function () {
-        console.log("防御");
-      },
-      jump: function () {
-        console.log("跳跃");
-      },
-      crouch: function () {
-        console.log("蹲下");
-      },
-    };
-    var makeCommand = function (receiver, state) {
-      // 创建命令
-      return function () {
-        receiver[state]();
+    var MacroCommand = function () {
+      return {
+        commandsList: [],
+        add: function (command) {
+          this.commandsList.push(command);
+        },
+        execute: function () {
+          for (var i = 0, command; (command = this.commandsList[i++]); ) {
+            command.execute();
+          }
+        },
       };
     };
-    var commands = {
-      119: "jump", // W
-      115: "crouch", // S
-      97: "defense", // A
-      100: "attack", // D
+    var openAcCommand = {
+      execute: function () {
+        console.log("打开空调");
+      },
     };
-    var commandStack = []; // 保存命令的堆栈
-    document.onkeypress = function (ev) {
-      var keyCode = ev.keyCode,
-        command = makeCommand(Ryu, commands[keyCode]);
-      if (command) {
-        command(); // 执行命令
-        commandStack.push(command); // 将刚刚执行过的命令保存进堆栈
-      }
+    /**********家里的电视和音响是连接在一起的，所以可以用一个宏命令来组合打开电视和打开音响的命令*********/ var openTvCommand =
+      {
+        execute: function () {
+          console.log("打开电视");
+        },
+      };
+    var openSoundCommand = {
+      execute: function () {
+        console.log("打开音响");
+      },
     };
-    document.getElementById("replay").onclick = function () {
-      // 点击播放录像
-      var command;
-      while ((command = commandStack.shift())) {
-        // 从堆栈里依次取出命令并执行
-        command();
-      }
+    var macroCommand1 = MacroCommand();
+    macroCommand1.add(openTvCommand);
+    macroCommand1.add(openSoundCommand);
+    /*********关门、打开电脑和打登录QQ的命令****************/ var closeDoorCommand =
+      {
+        execute: function () {
+          console.log("关门");
+        },
+      };
+    var openPcCommand = {
+      execute: function () {
+        console.log("开电脑");
+      },
     };
+    var openQQCommand = {
+      execute: function () {
+        console.log("登录QQ");
+      },
+    };
+    var macroCommand2 = MacroCommand();
+    macroCommand2.add(closeDoorCommand);
+    macroCommand2.add(openPcCommand);
+    macroCommand2.add(openQQCommand);
+    /*********现在把所有的命令组合成一个“超级命令”**********/ var macroCommand =
+      MacroCommand();
+    macroCommand.add(openAcCommand);
+    macroCommand.add(macroCommand1);
+    macroCommand.add(macroCommand2);
+    /*********最后给遥控器绑定“超级命令”**********/ var setCommand = (function (
+      command
+    ) {
+      document.getElementById("button").onclick = function () {
+        command.execute();
+      };
+    })(macroCommand);
   </script>
 </html>
