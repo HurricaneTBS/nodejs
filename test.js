@@ -1,33 +1,8 @@
-function sendLog(status) {
-  console.log(`log message is ${status}`);
+const wait = async (milliseconds) =>
+  new Promise((resolve) => setTimeout(resolve, milliseconds,'ddddd'));
+const test = async ()=>{
+  const res = await wait(2000)
+  console.log(res);
 }
 
-function jumpTo(pageUrl) {
-  console.log(`跳转到 ${pageUrl}`);
-}
-
-const actions = new Map([
-  [
-    { identity: "guest", status: 1 },
-    () => {
-      /*do sth*/
-    },
-  ],
-  [
-    { identity: "guest", status: 2 },
-    () => {
-      /*do sth*/
-    },
-  ],
-  //...
-]);
-
-const onButtonClick = (identity, status) => {
-  let action = [...actions].filter(
-    ([key, value]) => key.identity == identity && key.status == status
-  );
-  console.log(action);
-  action.forEach(([key, value]) => value.call(this));
-};
-
-onButtonClick("guest",1)
+test()
