@@ -1,30 +1,27 @@
-const synchronousFile = (id) => {
-  console.log(`开始同步文件，id为：${id}`);
+var Iterator = function (obj) {
+  var current = 0;
+  var next = function () {
+    current += 1;
+  };
+  var isDone = function () {
+    return current >= obj.length;
+  };
+  var getCurrItem = function () {
+    return obj[current];
+  };
+  return { next: next, isDone: isDone, getCurrItem: getCurrItem };
 };
 
-const proxySynchronousFile = (() => {
-  const cache = [];
-  let timer = null;
-  return function (id) {
-    cache.push(id);
-    if (timer) {
-      return;
+var compare = function (iterator1, iterator2) {
+  while (!iterator1.isDone() && !iterator2.isDone()) {
+    if (iterator1.getCurrItem() !== iterator2.getCurrItem()) {
+      throw new Error("iterator1和iterator2不相等");
     }
-    timer = setTimeout(() => {
-      synchronousFile(cache.join(","));
-      clearTimeout(timer);
-      timer = null;
-      cache.length = 0;
-    }, 2000);
-  };
-})();
-
-const checkboxes = document.getElementsByTagName("input");
-
-for (let i = 0, c; (c = checkboxes[i++]); ) {
-  c.onclick = function () {
-    if (this.checked === true) {
-        proxySynchronousFile(this.id);
-    }
-  };
-}
+    iterator1.next();
+    iterator2.next();
+  }
+  console.log("iterator1和iterator2相等");
+};
+var iterator1 = Iterator([1, 2, 3, 23]);
+var iterator2 = Iterator([1, 2, 3]);
+compare(iterator1, iterator2);
