@@ -34,3 +34,14 @@
 - [ ] [URL](https://developer.mozilla.org/zh-CN/docs/Web/API/URL)
 - [ ] [URLSearchParams](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams)
 
+- [ ] [箭头函数的this指向](https://segmentfault.com/a/1190000010680814)
+
+
+
+
+## F2F
+
+- [英文算法JS](https://github.com/sohamkamani/javascript-design-patterns-for-humans/blob/master/README.md)
+- [JavaScript进阶列表](https://github.com/luan0ap/javascript-questions/blob/master/zh-CN/README-zh_CN.md)
+
+- [30-seconds-of-code](https://github.com/luan0ap/30-seconds-of-code#speech-synthesis-experimental)

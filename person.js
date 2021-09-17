@@ -1,18 +1,9 @@
-const strategies = {
-  S: function (salary) {
-    return salary * 4;
-  },
-  A: function (salary) {
-    return salary * 3;
-  },
-  B: function (salary) {
-    return salary * 2;
-  },
-};
+function foo() {
+  setTimeout(() => {
+    console.log('id:', this.id);
+  }, 100);
+}
 
-const calculateBonus = function (level, salary) {
-  return strategies[level](salary);
-};
+var id = 21;
 
-console.log(calculateBonus("S", 20000)); // 输出：80000
-console.log(calculateBonus("A", 10000)); // 输出：30000
+foo.call({ id: 42 });
