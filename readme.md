@@ -35,6 +35,9 @@
 - [ ] [URLSearchParams](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams)
 
 - [ ] [箭头函数的this指向](https://segmentfault.com/a/1190000010680814)
+- [ ] [数组扁平化](http://caibaojian.com/js-array-flatten.html)
+- [ ] [正则表达式(掘金)](https://juejin.cn/post/6844903487155732494)
+
 
 
 

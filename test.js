@@ -6,8 +6,8 @@ const Folder = function (name) {
   };
   this.scan = function () {
     console.log(`开始扫描文件夹：${this.name}`);
-    for(let i=0,file,files=this.files;file = files[i++];){
-        file.scan()
+    for (let i = 0, file, files = this.files; (file = files[i++]); ) {
+      file.scan();
     }
   };
 };
@@ -87,3 +87,28 @@ folder.scan();
 // folder.add(folder3);
 // folder.add(file5);
 // folder.scan();
+
+var RefreshMenuBarCommand = (function () {
+  function RefreshMenuBarCommand() {}
+  RefreshMenuBarCommand.prototype.execute = function () {
+    console.log("刷新菜单界面");
+  };
+  return RefreshMenuBarCommand;
+})();
+var AddSubMenuCommand = (function () {
+  function AddSubMenuCommand() {}
+  AddSubMenuCommand.prototype.execute = function () {
+    console.log("增加子菜单");
+  };
+  return AddSubMenuCommand;
+})();
+var DelSubMenuCommand = (function () {
+  function DelSubMenuCommand() {}
+  return DelSubMenuCommand;
+})();
+var refreshMenuBarCommand = new RefreshMenuBarCommand(),
+  addSubMenuCommand = new AddSubMenuCommand(),
+  delSubMenuCommand = new DelSubMenuCommand();
+refreshMenuBarCommand.execute();
+addSubMenuCommand.execute();
+delSubMenuCommand.execute();
