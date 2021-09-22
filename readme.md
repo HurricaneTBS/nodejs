@@ -1,7 +1,7 @@
 ## 目录
 
 1. [books](https://github.com/HurricaneTBS/nodejs/tree/main/books)
-2. [ES6](https://github.com/HurricaneTBS/nodejs/tree/main/es)
+2. [ES6](https://github.com/HurricaneTBS/nodejs/blob/main/es/readme.md)
 
 ## 秘籍收藏
 
