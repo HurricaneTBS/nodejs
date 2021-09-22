@@ -1,5 +1,8 @@
 ## 目录
 
+1. [books](https://github.com/HurricaneTBS/nodejs/tree/main/books)
+    - [新时期的nodejs](https://github.com/HurricaneTBS/nodejs/tree/main/books/%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84nodejs)
+
 1. [ES6](https://github.com/HurricaneTBS/nodejs/blob/80a98eb536153de750779153d407f3cf515ab552/es/readme.md)
 
 ## 秘籍收藏
