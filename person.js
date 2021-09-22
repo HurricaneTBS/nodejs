@@ -1,9 +1,7 @@
-function foo() {
-  setTimeout(() => {
-    console.log('id:', this.id);
-  }, 100);
-}
+const numbers = [0, 1, 2, 3, 4, 5, 6];
 
-var id = 21;
+numbers.push(...[10, 20]);
+console.log(numbers);
 
-foo.call({ id: 42 });
+numbers.splice(2, 2);
+console.log(numbers);
