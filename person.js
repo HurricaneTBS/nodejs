@@ -1,7 +1,14 @@
-const numbers = [0, 1, 2, 3, 4, 5, 6];
+function Set() {
+  let items = {};
+  this.has = function (value) {
+    return items.hasOwnProperty(value);
+  };
 
-numbers.push(...[10, 20]);
-console.log(numbers);
-
-numbers.splice(2, 2);
-console.log(numbers);
+  this.add = function (value) {
+    if (!this.has(value)) {
+      items[value] = value;
+      return true;
+    }
+    return false;
+  };
+}

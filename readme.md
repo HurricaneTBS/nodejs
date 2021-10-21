@@ -1,6 +1,6 @@
 ## 目录
 
-1. [books](https://github.com/HurricaneTBS/nodejs/tree/main/books)
+1. [books](https://github.com/HurricaneTBS/nodejs/blob/main/books/readme.md)
 2. [ES6](https://github.com/HurricaneTBS/nodejs/blob/main/es/readme.md)
 
 ## 秘籍收藏
@@ -38,7 +38,9 @@
 - [ ] [箭头函数的this指向](https://segmentfault.com/a/1190000010680814)
 - [ ] [数组扁平化](http://caibaojian.com/js-array-flatten.html)
 - [ ] [正则表达式(掘金)](https://juejin.cn/post/6844903487155732494)
-
+- [ ] [vue rfc](https://github.com/vuejs/rfcs/tree/master/active-rfcs)
+- [ ] [加快Vue项目的开发速度](https://juejin.cn/post/6844903735668244488)
+- [ ] [使用require.context实现前端工程自动化](https://www.jianshu.com/p/c894ea00dfec)
 
 
 
