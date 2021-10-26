@@ -1,14 +1,3 @@
-function Set() {
-  let items = {};
-  this.has = function (value) {
-    return items.hasOwnProperty(value);
-  };
-
-  this.add = function (value) {
-    if (!this.has(value)) {
-      items[value] = value;
-      return true;
-    }
-    return false;
-  };
-}
+const str = "abc abbc abbbc";
+const res = str.match(/ab{1,5}c/g)
+console.log(res);
