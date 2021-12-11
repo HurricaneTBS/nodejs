@@ -1,5 +1,6 @@
-const regex = /^|$/g
+async function fetchText(){
+    let res = await fetch("./readme.md");
+    console.log(res);
+}
 
-const str = "hello  hello";
-
-console.log(str.replace(regex,"--"));
+fetchText()
